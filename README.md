@@ -1,2 +1,2 @@
 # mytestgit
-teste feito
+Biblioteca de estruturas de dados em C (ou apenas uma tentativa)
