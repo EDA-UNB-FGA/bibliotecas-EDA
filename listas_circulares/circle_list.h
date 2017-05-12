@@ -11,6 +11,7 @@ struct Node{
 struct Header{
 	int tam;
 	int (*compare)(void *,void *);
+	int (*igualdade)(void*,void*);
 	struct Node *inicio, *fim;
 };
 
@@ -31,58 +32,52 @@ node *cria(void *data){
 	return tmp;
 }
 
-void inserir_vazio(header *list, node *input){
-	list->inicio=input;	
-	list->fim=input;
+
+void inserir_vazio(header *list, void *data){
+	printf("sjdfkajsdlkf\n");
+	list->inicio=list->fim=cria(data);
 }
 
-//na lista circular inserir no inicio e no fim é a mesma operação
-void inserir_inicio(header *list, node *input){
-	input->prox=list->inicio;
-	input->prev=list->fim;
-
-	list->fim->prox=input;
-	list->inicio->prev=input;
-		
-	list->inicio=input;
-}
-
-void generic_inserction(header *list, void *data){
-	node *tmp = cria(data);
-	list->tam++;
-	if(list->inicio==NULL)inserir_vazio(list,tmp);
-	else{
-		//inserção em qualquer posição de forma organizada
-		node *cpy=list->inicio;	
-		while(cpy->prox!=list->inicio && list->compare(cpy->info,data)) cpy=cpy->prox;
-			if(cpy==list->inicio)inserir_inicio(list,tmp);
-			else{
-				tmp->prox=cpy;
-				tmp->prev=cpy->prev;
-				cpy->prev->prox=cpy;
-				cpy->prev=tmp;	
-				
-			}
-	}
-}
-
-//recebe uma informação como argumento de busca, uma função para procurar o elemento e libera a memória daquele elemento
-void excluir(header *list, void *data, int (*equals)(void *, void*)){
-	node *cpy = list->inicio;
-
-	while(cpy!=NULL && equals(cpy->info,data)) cpy=cpy->prox;
-	//lista vazia
-	if(list->inicio==NULL)return;
-	//caso tenha apenas um elemento 
-	if(cpy==list->inicio){
-		free(list->inicio);
-		list->inicio=list->fim=NULL;
-	}else{
-		cpy->prox->prev=cpy->prev;
-		cpy->prev->prox=cpy->prox;
-		free(cpy);
-	}
+void inserir_inicio(header *list, void *data){
+	node *tmp=cria(data);
+	tmp->prox=list->inicio;
+	tmp->prev=list->fim;
 	
+	list->inicio->prev=tmp;
+	list->fim->prox=tmp;
+		
+	list->inicio=tmp;
+}
+//da pra melhor... a função é a mesma mas o set no final muda
+void inserir_fim(header *list, void *data){
+	node *tmp=cria(data);
+	tmp->prox=list->inicio;
+	tmp->prev=list->fim;
+	
+	list->inicio->prev=tmp;
+	list->fim->prox=tmp;
+	
+	list->fim=list->fim->prox;
+}
+
+//inserção genérica as funções inserir_inicio e inserir_fim existem para manipularmos os ponteiros do header
+//PS* a inserção organizada ainda não está funcionando como deveria
+void generic_inserction(header *list, void *data){
+	list->tam++;
+	if(list->inicio==NULL)inserir_vazio(list,data);
+	else{
+		node *cpy=list->inicio;
+		while(cpy->prox!=list->inicio && list->compare(cpy->info,data))cpy=cpy->prox;
+		if(cpy==list->inicio)inserir_inicio(list,data);
+		else if(cpy==list->fim)inserir_fim(list,data);
+		else{
+			node *tmp = cria(data);
+			tmp->prox=cpy;
+			tmp->prev=cpy->prev;
+			cpy->prev->prox=tmp;
+			cpy->prev=tmp;
+		}
+	}
 }
 
 #endif
