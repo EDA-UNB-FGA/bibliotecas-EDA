@@ -32,9 +32,8 @@ node *cria(void *data){
 	return tmp;
 }
 
-
 void inserir_vazio(header *list, void *data){
-	printf("sjdfkajsdlkf\n");
+	list->tam++;
 	list->inicio=list->fim=cria(data);
 }
 
@@ -42,32 +41,31 @@ void inserir_inicio(header *list, void *data){
 	node *tmp=cria(data);
 	tmp->prox=list->inicio;
 	tmp->prev=list->fim;
-	
-	list->inicio->prev=tmp;
 	list->fim->prox=tmp;
-		
+	list->inicio->prev=tmp;
 	list->inicio=tmp;
 }
-//da pra melhor... a função é a mesma mas o set no final muda
+
 void inserir_fim(header *list, void *data){
-	node *tmp=cria(data);
+	node * tmp = cria(data);
 	tmp->prox=list->inicio;
 	tmp->prev=list->fim;
-	
-	list->inicio->prev=tmp;
 	list->fim->prox=tmp;
-	
-	list->fim=list->fim->prox;
+	list->inicio->prev=tmp;
+	list->fim=tmp;
 }
 
 //inserção genérica as funções inserir_inicio e inserir_fim existem para manipularmos os ponteiros do header
 //PS* a inserção organizada ainda não está funcionando como deveria
 void generic_inserction(header *list, void *data){
-	list->tam++;
-	if(list->inicio==NULL)inserir_vazio(list,data);
+	if(list->tam==0)inserir_vazio(list,data);
 	else{
-		node *cpy=list->inicio;
-		while(cpy->prox!=list->inicio && list->compare(cpy->info,data))cpy=cpy->prox;
+		node *cpy=list->inicio, *p=list->inicio;
+		while(cpy->prox!=list->fim && list->compare(cpy->info,data)){
+			p=cpy;
+			cpy=cpy->prox;
+		}
+
 		if(cpy==list->inicio)inserir_inicio(list,data);
 		else if(cpy==list->fim)inserir_fim(list,data);
 		else{
@@ -77,7 +75,7 @@ void generic_inserction(header *list, void *data){
 			cpy->prev->prox=tmp;
 			cpy->prev=tmp;
 		}
-	}
+	}	
 }
 
 #endif

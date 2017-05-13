@@ -27,20 +27,20 @@ void listar(header *list){
 	}
 	printf("\n");
 }
-//essas comparação coloca na ordem de inserção
+//essa comparação coloca na ordem de inserção
 int comp(void *a, void *b){
-	return 1;
+	return ((data*)a)->value <= ((data*)b)->value;
 }
 
 int main(){
 
 	header *list=inicializar();
 	list->compare=comp;
-	int vet[]={4,2,3,1};
+	int vet[]={1,2,3,4,5,6,7,8,9};
 	int i;
-	for(i=0;i<4; ++i){
-		printf("Entrar o %d\n", i );
+	for(i=0;i<9; ++i){
 		generic_inserction(list,init(vet[i]));
+		printf("Valor inicio %d valor final %d \n", ((data*)(list->inicio->info))->value, ((data*)(list->fim->info))->value );
 		listar(list);
 	}
 	
