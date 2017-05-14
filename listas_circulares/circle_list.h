@@ -5,77 +5,92 @@
 
 struct Node{
 	void *info;
-	struct Node *prev, *prox;
+	struct Node *prox, *prev;
 };
 
 struct Header{
 	int tam;
-	int (*compare)(void *,void *);
-	int (*igualdade)(void*,void*);
 	struct Node *inicio, *fim;
+	int (*comparador)(void*,void*);
+	int (*igualdade)(void*, void*);
 };
 
+//assinaturas 
 typedef struct Header header;
 typedef struct Node node;
 
+
 header *inicializar(){
-	header *aux=(header*)malloc(sizeof(header));
-	aux->tam=0;
-	aux->inicio=aux->fim=NULL;
-	return aux;
+	header *tmp = (header*)malloc(sizeof(header));
+	tmp->tam=0;
+	tmp->inicio=tmp->fim=NULL;
+	return tmp;	
 }
 
-node *cria(void *data){
-	node *tmp = (node*)malloc(sizeof(node));
+node *makeNode(void *data){
+	node *tmp=(node*)malloc(sizeof(node));
 	tmp->info=data;
-	tmp->prev=tmp->prox=tmp;
+	tmp->prox=tmp->prev=tmp;
 	return tmp;
 }
 
+void toLinear(header *list){
+	list->inicio->prev=NULL;
+	list->fim->prox=NULL;
+}
+
+void toCircle(header *list){
+	list->inicio->prev=list->fim;
+	list->fim->prox=list->inicio;
+}
+
+//somente para listas lineares (como a operação para deixa a lista lienar é O(1) é preferível trabalhar com elas)
 void inserir_vazio(header *list, void *data){
+	printf("[inserir vazio]\n");
+	node *tmp=makeNode(data);
+	list->inicio=list->fim=tmp;
 	list->tam++;
-	list->inicio=list->fim=cria(data);
 }
 
 void inserir_inicio(header *list, void *data){
-	node *tmp=cria(data);
+	printf("[inserir inicio]\n");
+	node *tmp=makeNode(data);
 	tmp->prox=list->inicio;
-	tmp->prev=list->fim;
-	list->fim->prox=tmp;
-	list->inicio->prev=tmp;
 	list->inicio=tmp;
+	list->tam++;
+	toCircle(list);
 }
 
 void inserir_fim(header *list, void *data){
-	node * tmp = cria(data);
-	tmp->prox=list->inicio;
-	tmp->prev=list->fim;
-	list->fim->prox=tmp;
-	list->inicio->prev=tmp;
+	printf("[inserir fim]\n");
+	node *tmp = makeNode(data);
+	list->fim->prox= tmp;
 	list->fim=tmp;
+	list->tam++;
+	toCircle(list);
 }
 
-//inserção genérica as funções inserir_inicio e inserir_fim existem para manipularmos os ponteiros do header
-//PS* a inserção organizada ainda não está funcionando como deveria
-void generic_inserction(header *list, void *data){
+void generic_inserction(header *list, void* data){
 	if(list->tam==0)inserir_vazio(list,data);
 	else{
+		toLinear(list);
 		node *cpy=list->inicio, *p=list->inicio;
-		while(cpy->prox!=list->fim && list->compare(cpy->info,data)){
+
+		while(cpy!=NULL && list->comparador(data,cpy->info)){
 			p=cpy;
 			cpy=cpy->prox;
 		}
-
-		if(cpy==list->inicio)inserir_inicio(list,data);
-		else if(cpy==list->fim)inserir_fim(list,data);
+		if(p==cpy)inserir_inicio(list,data);
+		else if(cpy==NULL)inserir_fim(list,data);
 		else{
-			node *tmp = cria(data);
+			node *tmp =makeNode(data);
 			tmp->prox=cpy;
-			tmp->prev=cpy->prev;
-			cpy->prev->prox=tmp;
+			tmp->prev=p;
+			p->prox=tmp;
 			cpy->prev=tmp;
 		}
-	}	
+	}
+	list->tam++;
+	toCircle(list);
 }
-
 #endif
