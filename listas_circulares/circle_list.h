@@ -89,4 +89,26 @@ void generic_inserction(header *list, void* data){
 		}
 	}
 }
+
+void generic_remove(header *list, void *data){
+	//caso vazio
+	if(list->tam!=0){
+		if(list->tam==1){
+			free(list->inicio);
+			list->inicio=list->fim=NULL;
+		}else{
+			node *cpy = list->inicio;
+			do{
+				if(list->igualdade(data,cpy->info)){
+					cpy->prox->prev=cpy->prev;
+					cpy->prev->prox=cpy->prox;
+					free(cpy);
+					break;
+				}
+				cpy=cpy->prox;
+			}while(cpy!=list->inicio);
+		}
+		list->tam--;
+	}
+}
 #endif
