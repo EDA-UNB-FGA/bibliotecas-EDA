@@ -28,10 +28,16 @@ void listar(header *list){
 int compar(void *a, void *b){
 	return ((data*)a)->value >= ((data*)b)->value;
 }
+
+int equals(void *a, void* b){
+	return ((data*)a)->value == ((data*)b)->value;
+}
+
 int main(){
 
 	header *list=inicializar();
 	list->comparador=compar;
+	list->igualdade=equals;
 	int vet[]={4,1,3,2,5,9};
 	int i;
 
@@ -39,6 +45,7 @@ int main(){
 		generic_inserction(list,init(vet[i]));
 		listar(list);
 	}	
-
+	generic_remove(list,init(4));
+	listar(list);
  return 0;
 }

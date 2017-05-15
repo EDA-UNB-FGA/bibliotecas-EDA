@@ -28,19 +28,25 @@ int comp(void *a, void *b){
 	return  ((data*)a)->value >= ((data*)b)->value;
 }
 
+int equals(void *a, void *b){
+	return ((data*)a)->value==((data*)b)->value;
+}
 
 int main(){
 
 	header *list =inicializar();
 	list->comparador=comp;
-	int vet[]={4,2,3,1};
+	list->igualdade=equals;
+	int vet[]={4,2,3,1,9,19,29};
 		int i;
 
-	for(i=0; i<4; i++){
+	for(i=0; i<7; i++){
 		printf("Amostra %d:\n", i+1);
 		generic_inserction(list,init(vet[i]));
 		listar(list);
 	}
+	generic_remove(list,init(vet[0]));
+	listar(list);
 
  return 0;
 }
