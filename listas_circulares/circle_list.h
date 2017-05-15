@@ -18,8 +18,12 @@ struct Header{
 //assinaturas 
 typedef struct Header header;
 typedef struct Node node;
+header *inicializar();
+node *makeNode(void*);
 
 
+//inicia o header com o comportamento adequado para o restante do programa 
+//inicializar tem um comportamento parecido com um construtor, portanto é NECESSÁRIO que esse método seja chamado
 header *inicializar(){
 	header *tmp = (header*)malloc(sizeof(header));
 	tmp->tam=0;
@@ -27,6 +31,7 @@ header *inicializar(){
 	return tmp;	
 }
 
+//cria um nó que aponta para ele mesmo
 node *makeNode(void *data){
 	node *tmp=(node*)malloc(sizeof(node));
 	tmp->info=data;
@@ -34,63 +39,54 @@ node *makeNode(void *data){
 	return tmp;
 }
 
-void toLinear(header *list){
-	list->inicio->prev=NULL;
-	list->fim->prox=NULL;
-}
-
-void toCircle(header *list){
-	list->inicio->prev=list->fim;
-	list->fim->prox=list->inicio;
-}
-
-//somente para listas lineares (como a operação para deixa a lista lienar é O(1) é preferível trabalhar com elas)
+//inicia o header com o primeiro elemento
 void inserir_vazio(header *list, void *data){
-	printf("[inserir vazio]\n");
 	node *tmp=makeNode(data);
 	list->inicio=list->fim=tmp;
 	list->tam++;
 }
 
-void inserir_inicio(header *list, void *data){
-	printf("[inserir inicio]\n");
-	node *tmp=makeNode(data);
-	tmp->prox=list->inicio;
-	list->inicio=tmp;
-	list->tam++;
-	toCircle(list);
-}
 
-void inserir_fim(header *list, void *data){
-	printf("[inserir fim]\n");
+//caso receba o 3º argumento como 1 a inserção será no inicio, com o argumento 0 a inserção é no final
+void inserir_pontas(header *list, void *data, int modo){
 	node *tmp = makeNode(data);
-	list->fim->prox= tmp;
-	list->fim=tmp;
+	tmp->prox=list->inicio;
+	tmp->prev=list->fim;
+	tmp->prox->prev=tmp;
+	tmp->prev->prox=tmp;
 	list->tam++;
-	toCircle(list);
+
+	if(modo==1)list->inicio=tmp;
+	else if(modo==0)list->fim=tmp;
 }
 
+//a inserção foi chamada de générica pois terá o comportamento da função de comparação (vide main.c)
 void generic_inserction(header *list, void* data){
+	//caso a lista não tenha nenhum elemento
 	if(list->tam==0)inserir_vazio(list,data);
 	else{
-		toLinear(list);
+		//como a inserção é organizada (por questões de busca) vamos linearizar a lista
+		list->inicio->prev=list->fim->prox=NULL;
 		node *cpy=list->inicio, *p=list->inicio;
-
 		while(cpy!=NULL && list->comparador(data,cpy->info)){
 			p=cpy;
 			cpy=cpy->prox;
 		}
-		if(p==cpy)inserir_inicio(list,data);
-		else if(cpy==NULL)inserir_fim(list,data);
+
+		if(cpy==p)inserir_pontas(list,data,1);
+		else if(cpy==NULL)inserir_pontas(list,data,0);
 		else{
-			node *tmp =makeNode(data);
+		
+			node *tmp=makeNode(data);
 			tmp->prox=cpy;
 			tmp->prev=p;
-			p->prox=tmp;
-			cpy->prev=tmp;
+			tmp->prox->prev=tmp;
+			tmp->prev->prox=tmp;
+			list->tam++;
+		//voltando a circular 
+		list->fim->prox=list->inicio;
+		list->inicio->prev=list->fim;
 		}
 	}
-	list->tam++;
-	toCircle(list);
 }
 #endif
