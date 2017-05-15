@@ -27,6 +27,7 @@ void inserir_vazio(header*,void*);
 void inserir_inciio(header*, void*);
 void inserir_fim(header*, void*);
 void generic_inserction(header*, void*);
+void generic_remove(header*, void*);
 
 
 //cria um node com a informação "data" e seus ponteiros nulos
@@ -88,14 +89,30 @@ void generic_inserction(header *list,void *data){
 			cpy->prev->prox=tmp;
 			cpy->prev=tmp	;
 		}
-		
 	}
 }
 
-//na exclusão o noso 
-
+//remove um elemento caso não encontre o programa simplesmente não altera a lista
 void generic_remove(header *list, void *data){
-	
+	node *cpy=list->inicio;
+	while(cpy!=NULL && !(list->igualdade(data,cpy->info)))cpy=cpy->prox;
+	if(cpy!=NULL){
+		//remoção inicio
+		if(cpy->prev==NULL){
+			list->inicio=list->inicio->prox;
+			list->inicio->prev=NULL;
+		}else if(cpy->prox==NULL){
+			//remoção no final da lista
+			list->fim=list->fim->prev;
+			list->fim->prox=NULL;
+		}else{
+			//remoção no meio
+			cpy->prox->prev=cpy->prev;
+			cpy->prev->prox=cpy->prox;
+		}
+		free(cpy);
+	}
 }
+
 
 #endif
