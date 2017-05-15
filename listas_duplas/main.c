@@ -32,10 +32,10 @@ int main(){
 
 	header *list=inicializar();
 	list->comparador=compar;
-	int vet[]={4,1,3,2};
+	int vet[]={4,1,3,2,5,9};
 	int i;
 
-	for(i=0; i<4; i++){
+	for(i=0; i<6; i++){
 		generic_inserction(list,init(vet[i]));
 		listar(list);
 	}	
