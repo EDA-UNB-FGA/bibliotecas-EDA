@@ -11,8 +11,10 @@ void debug(char name[], int tam){
 }
 
 
-/*Essa questão é simples no entanto os casos podem ser um pouco chatinhos se vc não pretar um pouco de atenção
-então vamos pontuar tudo o que precisa saber para poder criar o swich :)
+/*Essa questão é simples no entanto os casos podem ser um pouco chatinhos se não prestarmos atenção
+
+Vamos pontuar tudo o que precisa saber para poder criar o swich :)
+
 1º se encontrar um '(' você simplesmente o empilha
 2º se encontrar um ')' desempilha-se tudo até o '(' (lembrando que o mesmo não é para ser empilhado
 3º ao encontrar o '+' ou o '-' desempilha tudo até o '(' no entanto dessa vez deixamos ele empilhado (está é a diferença com o passo 2)
