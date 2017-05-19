@@ -33,7 +33,7 @@ void mostrar(void *input){
 
 int main(){
 	header *list = inicializar();
-	list->equals=eque;	//inicizaliando o header com as funções
+	list->equals=eque;	//inicializando o header com as funções
 	list->compare=comp;
 	list->print=mostrar;
 
