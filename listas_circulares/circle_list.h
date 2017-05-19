@@ -3,112 +3,120 @@
 
 #include <stdlib.h>
 
+//note heterogêneo
 struct Node{
 	void *info;
-	struct Node *prox, *prev;
+	struct Node *prev, *prox;
 };
 
+//header completo
 struct Header{
-	int tam;
-	struct Node *inicio, *fim;
-	int (*comparador)(void*,void*);
-	int (*igualdade)(void*, void*);
+	struct Node *head; //cabeça da lista (inicio e fim)
+	int tam;	
+
+	//funções definidas pelo usuário 
+	int (*compare)(void*,void*); //para comparação
+	int (*equals)(void*, void*); //igualdade
+	void (*print)(void*); //mostrar um nó na listagem
 };
 
-//assinaturas 
+//--assinaturas--
 typedef struct Header header;
 typedef struct Node node;
-header *inicializar();
 node *makeNode(void*);
+header *inicializar();
+void generic_inserction(header*,void*); 
+void generic_remove(header*,void*);
+void listar(header*);
 
+/*
+-----------------------------------------
+preciso implementar as funções recursivas
+-----------------------------------------
+*/
 
-//inicia o header com o comportamento adequado para o restante do programa 
-//inicializar tem um comportamento parecido com um construtor, portanto é NECESSÁRIO que esse método seja chamado
-header *inicializar(){
-	header *tmp = (header*)malloc(sizeof(header));
-	tmp->tam=0;
-	tmp->inicio=tmp->fim=NULL;
-	return tmp;	
-}
-
-//cria um nó que aponta para ele mesmo
+//cria um novo node circular
 node *makeNode(void *data){
-	node *tmp=(node*)malloc(sizeof(node));
+	node *tmp = (node*)malloc(sizeof(node));
 	tmp->info=data;
 	tmp->prox=tmp->prev=tmp;
 	return tmp;
 }
 
-//inicia o header com o primeiro elemento
-void inserir_vazio(header *list, void *data){
-	node *tmp=makeNode(data);
-	list->inicio=list->fim=tmp;
-	list->tam++;
+//inicializa o header
+/*
+vale observar que essa função não inicializa os ponteiros 
+das funções no header, fica a cargo do usuário esse tratamento.
+Não coloquei pois nem sempre usaremos todas as funções dessa lib.
+*/
+header *inicializar(){
+	header *top = (header*)malloc(sizeof(header));
+	top->tam=0;
+	top->head=NULL;
+	return top;
 }
 
-
-//caso receba o 3º argumento como 1 a inserção será no inicio, com o argumento 0 a inserção é no final
-void inserir_pontas(header *list, void *data, int modo){
+//insere um elemento na lista usando a função de comparação
+void generic_inserction(header *list, void *data){
 	node *tmp = makeNode(data);
-	tmp->prox=list->inicio;
-	tmp->prev=list->fim;
-	tmp->prox->prev=tmp;
-	tmp->prev->prox=tmp;
-	list->tam++;
-
-	if(modo==1)list->inicio=tmp;
-	else if(modo==0)list->fim=tmp;
-}
-
-//a inserção foi chamada de générica pois terá o comportamento da função de comparação (vide main.c)
-void generic_inserction(header *list, void* data){
-	//caso a lista não tenha nenhum elemento
-	if(list->tam==0)inserir_vazio(list,data);
+	if(list->head==NULL)list->head=tmp; //caso lista vazia
 	else{
-		//como a inserção é organizada (por questões de busca) vamos linearizar a lista
-		list->inicio->prev=list->fim->prox=NULL;
-		node *cpy=list->inicio, *p=list->inicio;
-		while(cpy!=NULL && list->comparador(data,cpy->info)){
-			p=cpy;
-			cpy=cpy->prox;
-		}
-
-		if(cpy==p)inserir_pontas(list,data,1);
-		else if(cpy==NULL)inserir_pontas(list,data,0);
-		else{
-		
-			node *tmp=makeNode(data);
-			tmp->prox=cpy;
-			tmp->prev=p;
+		if(!list->compare(tmp->info,list->head->info)){
+			tmp->prox=list->head;			//inserção no inicio
+			tmp->prev=list->head->prev;	
 			tmp->prox->prev=tmp;
 			tmp->prev->prox=tmp;
-			list->tam++;
-		//voltando a circular 
-		list->fim->prox=list->inicio;
-		list->inicio->prev=list->fim;
+			list->head=tmp;
+		}else if(list->compare(tmp->info,list->head->prev->info)){
+			tmp->prox=list->head;		//inserção no final (perceba que é parecido)
+			tmp->prev=list->head->prev;
+			tmp->prox->prev=tmp;
+			tmp->prev->prox=tmp;
+		}else{
+			printf("Entrei aqui\n");
+			node * cpy = list->head->prox; //inserção no inicio já olhamos portanto começamos do próximo
+			while(cpy!=list->head && list->compare(data,cpy->info))cpy=cpy->prox; //navegando
+			tmp->prox=cpy;
+			tmp->prev=cpy->prev;
+			tmp->prev->prox=tmp;
+			tmp->prox->prev=tmp;
 		}
+	}
+	list->tam++; //adiciona um elemento na lista
+}
+
+//remove um elemento da lista usando a função de igualdade
+//caso não encontre o elemento a função nas altera a lista
+void generic_remove(header *list, void *data){
+	node *cpy=list->head;
+	if(list->head!=NULL){
+		do{
+			if(list->equals(data,cpy->info)){
+				if(cpy==list->head)list->head=list->head->prox;
+				cpy->prox->prev=cpy->prev;
+				cpy->prev->prox=cpy->prox;
+				free(cpy);
+				
+			}
+			cpy=cpy->prox;
+		}while(cpy!=list->head);	
+		list->tam--;
+		if(list->tam==0)list->head=NULL;	
 	}
 }
 
-void generic_remove(header *list, void *data){
-	//caso vazio
-	if(list->tam!=0){
-		if(list->tam==1){
-			free(list->inicio);
-			list->inicio=list->fim=NULL;
-		}else{
-			node *cpy = list->inicio;
-			do{
-				if(list->igualdade(data,cpy->info)){
-					cpy->prox->prev=cpy->prev;
-					cpy->prev->prox=cpy->prox;
-					free(cpy);
-					break;
-				}
-				cpy=cpy->prox;
-			}while(cpy!=list->inicio);
-		}
-		list->tam--;
-	}
+//imprime na tela todos os elementos da lista
+void listar(header *list){
+	if(list->head!=NULL){
+		node *cpy=list->head;
+		do{
+			list->print(cpy->info);
+			cpy=cpy->prox;
+		}while(cpy!=list->head);
+	}else printf("Lista Vazia");
+	printf("\n");
 }
+
+
+
 #endif
