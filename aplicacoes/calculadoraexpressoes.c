@@ -10,15 +10,14 @@ int main(){
 
 	char string[101];
 	char pilha[100],posfixa[101];
-	int tam, tampi=0, tampos=0,i;
+	int tampi=0, tampos=0,i;
 
 	scanf("%[^\n]s", string);
-	tam =strlen(string);
 
 	//para calcular expressões vamos transfomar a equação na notação polonesa e depois usar as filas para calcular o valor da expressão
 
 	//transformando em notação posfixa
-	for(i=0; i<tam; ++i){
+	for(i=0; string[i]!='\0'; ++i){
 		switch(string[i]){
 		case '(':
 			pilha[tampi++]=string[i];
@@ -42,12 +41,11 @@ int main(){
 	posfixa[tampos]='\0'; //colocando o terminado na string
 	printf("%s\n", posfixa);
 
-	tam = strlen(posfixa);
 	int conta[100];
 	tampi=0;
 	//calculando resultado
 	int a,b;
-	for(i=0; i<tam; ++i){
+	for(i=0; posfixa[i]!='\0'; ++i){
 		switch(posfixa[i]){
 		case '+':
 			tampi--;
