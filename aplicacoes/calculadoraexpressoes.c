@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define N 101
 
 int main(){
 	 /*vale lembrar que esse algoritmo tem muitas falhas, so resolve o caso onde a equação
 	 tem parenteses ao redor de toda a expressão e os números no cálculo tiverem apenas um dígito
 	*/
 
-	char string[101];
-	char pilha[100],posfixa[101];
+	char string[N];
+	char pilha[N],posfixa[N];
 	int tampi=0, tampos=0,i;
 
 	scanf("%[^\n]s", string);
@@ -41,7 +42,7 @@ int main(){
 	posfixa[tampos]='\0'; //colocando o terminado na string
 	printf("%s\n", posfixa);
 
-	int conta[100];
+	int conta[N];
 	tampi=0;
 	//calculando resultado
 	int a,b;
