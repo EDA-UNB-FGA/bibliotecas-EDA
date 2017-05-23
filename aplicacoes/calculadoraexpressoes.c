@@ -21,26 +21,36 @@ int main(){
 	for(i=0; string[i]!='\0'; ++i){
 		switch(string[i]){
 		case '(':
-			pilha[tampi++]=string[i];
+			pilha[tampi++]=string[i]; //adiciona todos os '('
 		 break;
 		case ')':
-			while(pilha[--tampi]!='(')posfixa[tampos++]=pilha[tampi];
+			while(pilha[--tampi]!='(')posfixa[tampos++]=pilha[tampi]; // quando encontrar um ')' desempilha até o '(' 
+										  //(ordem de precedencia)
 		 break;
 		case '+':
 		case '-':
-			while(pilha[tampi-1]!='(')posfixa[tampos++]=pilha[--tampi];
-			pilha[tampi++]=string[i];
+			while(pilha[tampi-1]!='(')posfixa[tampos++]=pilha[--tampi]; //quando encontrar um '+' ou um '-'
+			pilha[tampi++]=string[i];				    //desempilhe até o '('
 		 break;
 		case '/':
 		case '*':
 			while(pilha[tampi-1]!='+' && pilha[tampi-1]!='-' && pilha[tampi-1]!='(')posfixa[tampos++]=pilha[--tampi];
 			pilha[tampi++]=string[i];
+			/*a precedência do '*' e '/' é maior que a '+' e '-' portanto quando encontrarmos eles
+			devemos para de desempilhar
+			*/
 		 break;
-		default : posfixa[tampos++]=string[i];
+		default : posfixa[tampos++]=string[i]; //adiciona os digitos 
 		}
 	}
 	posfixa[tampos]='\0'; //colocando o terminado na string
 	printf("%s\n", posfixa);
+
+	/*
+		passamos na posfixa até encontrarmos uma operação,
+		caso encontre operamos os 2 primeiros elementos da pilha 
+		e retornamos o resultado
+	*/
 
 	int conta[N];
 	tampi=0;
