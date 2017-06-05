@@ -47,6 +47,16 @@ node* clear(node *root){
 	free(root);
 	return NULL;
 }
+
+node* remove_by_merge(node *in,int value){
+	node *cpy=in;
+	if(cpy!=NULL){
+		if(cpy->value==value)cpy=generic_insert(cpy->left,cpy->right);
+		else if(cpy->value>value)cpy->left=remove_by_merge(cpy->left,value);
+		else cpy->right=remove_by_merge(cpy->right,value);
+	}
+	return cpy;
+}
 //cria uma arvore balanceada atraves de um array ordenado
 node *balance(int matriz[],int first, int last){
 	node *cpy=NULL;
@@ -76,7 +86,10 @@ int main(){
 	int i;
 
 	arv=balance(values,0,7);
-	list2(arv,0);
+	listar(arv);
+	printf("\n");
+	arv=remove_by_merge(arv,1);
+	listar(arv);
 	printf("\n");
 
 	
