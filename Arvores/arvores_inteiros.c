@@ -47,19 +47,39 @@ node* clear(node *root){
 	free(root);
 	return NULL;
 }
-
+//cria uma arvore balanceada atraves de um array ordenado
+node *balance(int matriz[],int first, int last){
+	node *cpy=NULL;
+	if(first<=last){
+		int middle = (first+last)/2;
+		cpy=generic_insert(cpy,novo(matriz[middle]));
+		cpy->left=balance(matriz,first,middle-1);
+		cpy->right=balance(matriz,middle+1,last);
+	}
+	return cpy;
+}
+//lista mostrando as ligações (ainda terá melhorias)
+void list2(node *in,int number){
+	node *cpy=NULL;
+	printf("[%d] %3d: ",number,in->value);
+	if(in->left!=NULL)printf("%3d ",in->left->value);
+	if(in->right!=NULL)printf("%3d ",in->right->value);
+	printf("\n");
+	if(in->left!=NULL)list2(in->left,++number);
+	if(in->right!=NULL)list2(in->right,++number);
+}
 int main(){
 
 	node *arv=NULL; //necessário inicializar
 
-	int values[]={1,3,6,2,9,10,63,-20}; // 7 elementos;
+	int values[]={-20,1,2,3,6,9,10,63}; // 7 elementos;
 	int i;
 
-	for(i=0; i<7; ++i){
-		arv=generic_insert(arv,novo(values[i]));
-		listar(arv);
-		printf("\n");
-	}
+	arv=balance(values,0,7);
+	list2(arv,0);
+	printf("\n");
+
+	
 
  return 0;
 }
