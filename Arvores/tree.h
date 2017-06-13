@@ -15,7 +15,7 @@ typedef struct Node node;
 //funções na forma recursiva
 node *novo(void*);
 node *generic_insert(node*, node*, int (*)(void*,void*));
-node *remove_bu_merging(node*, void*, int (*)(void*,void*));
+node *remove_by_merging(node*, void*, int (*)(void*,void*));
 int get_nivel(node*,void*,int,int (*)(void*,void*));
 
 //funções interativas
