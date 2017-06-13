@@ -18,6 +18,8 @@ node *generic_insert(node*, node*, int (*)(void*,void*));
 node *remove_bu_merging(node*, void*, int (*)(void*,void*));
 int get_nivel(node*,void*,int,int (*)(void*,void*));
 
+//funções interativas
+void busca_por_largura(node*,void (*)(void*),int (*)(void*,void*));
 //retorna um nó com a informação de data
 node *novo(void *data){
 	node *tmp = (node*)malloc(sizeof(node));
@@ -70,7 +72,7 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 
 /* IMPLEMENTAÇÃO DAS FUNÇÕES INTERATIVAS */
 
-//mostra em forma de pirâmide a arvores (ainda esta incompleto)
+//mostra em forma de pirâmide a arvores (funcional)
 void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
 	node *fila[N];
 	int inicio=0,fim=0, nivel=0,tmp;
