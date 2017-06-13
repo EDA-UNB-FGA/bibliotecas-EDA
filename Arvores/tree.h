@@ -74,11 +74,12 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
 	node *fila[N];
 	int inicio=0,fim=0, nivel=0,tmp;
+	int i;
 	fila[fim++]=arv;
 	while(inicio!=fim){
 		if(fila[inicio]->left!=NULL)fila[fim++]=fila[inicio]->left;
 		if(fila[inicio]->right!=NULL)fila[fim++]=fila[inicio]->right;
-		if(tmp=get_nivel(arv,fila[inicio]->info,0,comp)!=nivel){
+		if((tmp=get_nivel(arv,fila[inicio]->info,0,comp))!=nivel){
 			printf("\n");
 			nivel=tmp;
 		}
