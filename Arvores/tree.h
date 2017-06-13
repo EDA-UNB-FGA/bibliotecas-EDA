@@ -53,7 +53,10 @@ void list_in_ordem(node *root,void (*my_print)(void*)){
 node * remove_by_merging(node *arv, void *key, int (*comp)(void*a, void*b)){
 	node *cpy=arv;
 	if(cpy!=NULL){
-		if(comp(arv->info,key)==0)cpy=generic_insert(cpy->left,cpy->right,comp);
+		if(comp(arv->info,key)==0){
+				cpy=generic_insert(cpy->left,cpy->right,comp);
+				free(arv);
+		}
 		else if(comp(arv->info,key)==1)cpy->left=remove_by_merging(cpy->left,key,comp);
 		else cpy->right=remove_by_merging(cpy->right,key,comp);
 	}
