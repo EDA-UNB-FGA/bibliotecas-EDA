@@ -1,6 +1,7 @@
 #ifndef TREE_H
 #define TREE_H
 #define MAX(x,y) (x>=y)? x : y
+#define N 100
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -64,6 +65,27 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 	else nivel=MAX(nivel,get_nivel(arv->right,key,nivel+1,comp));
 }
 
+
 /* FIM DAS FUNÇÕES RECURSIVAS */
+
+/* IMPLEMENTAÇÃO DAS FUNÇÕES INTERATIVAS */
+
+//mostra em forma de pirâmide a arvores (ainda esta incompleto)
+void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
+	node *fila[N];
+	int inicio=0,fim=0, nivel=0,tmp;
+	fila[fim++]=arv;
+	while(inicio!=fim){
+		if(fila[inicio]->left!=NULL)fila[fim++]=fila[inicio]->left;
+		if(fila[inicio]->right!=NULL)fila[fim++]=fila[inicio]->right;
+		if(tmp=get_nivel(arv,fila[inicio]->info,0,comp)!=nivel){
+			printf("\n");
+			nivel=tmp;
+		}
+		
+		p(fila[inicio++]->info);
+		
+	}
+}
 
 #endif

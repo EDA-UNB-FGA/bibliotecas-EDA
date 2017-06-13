@@ -34,7 +34,7 @@ int main(){
 		list_in_ordem(arv,print);
 		printf("\n");
 		printf("Nível %d\n", get_nivel(arv,init(2),0,comparator));
-	
+		busca_por_largura(arv,print,comparator);
 
  return 0;
 }
