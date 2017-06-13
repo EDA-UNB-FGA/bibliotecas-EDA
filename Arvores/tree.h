@@ -77,10 +77,11 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 
 //mostra em forma de pirâmide a arvores (funcional)
 void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
+	int inicio=0, fim=0, nivel=0, tmp, i;
+
 	node *fila[N];
-	int inicio=0,fim=0, nivel=0,tmp;
-	int i;
 	fila[fim++]=arv;
+
 	while(inicio!=fim){
 		if(fila[inicio]->left!=NULL)fila[fim++]=fila[inicio]->left;
 		if(fila[inicio]->right!=NULL)fila[fim++]=fila[inicio]->right;
@@ -88,9 +89,7 @@ void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
 			printf("\n");
 			nivel=tmp;
 		}
-		
 		p(fila[inicio++]->info);
-		
 	}
 }
 
