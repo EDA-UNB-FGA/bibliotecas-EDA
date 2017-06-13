@@ -70,6 +70,19 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 	else nivel=MAX(nivel,get_nivel(arv->right,key,nivel+1,comp));
 }
 
+//balanceamento de vetor ordenado (ainda não funcional)
+node* balance_vet(void* matriz[], int first, int last){
+	node *cpy=NULL;
+	int mid=(first+last)/2;
+	printf("left %d right %d my mid %d\n",first, last,mid);
+	while(first<=last){
+		cpy=novo(matriz[mid]);
+		cpy->left=balance_vet(matriz,first,mid-1);
+		cpy->right=balance_vet(matriz,mid+1,last);
+	}
+	return cpy;
+}
+
 
 /* FIM DAS FUNÇÕES RECURSIVAS */
 
