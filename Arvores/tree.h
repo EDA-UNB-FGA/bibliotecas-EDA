@@ -18,6 +18,7 @@ node *generic_insert(node*, node*, int (*)(void*,void*));
 node *remove_by_merging(node*, void*, int (*)(void*,void*));
 node *remove_by_copy(node*, void*, int (*)(void*,void*));
 int get_nivel(node*,void*,int,int (*)(void*,void*));
+int get_altura(node*);
 
 //funções interativas
 void busca_por_largura(node*,void (*)(void*),int (*)(void*,void*));
@@ -70,32 +71,28 @@ node * remove_by_merging(node *arv, void *key, int (*comp)(void*a, void*b)){
 
 //remove um elemento da árvore por cópia
 node *remove_by_copy(node* arv, void *key, int (*comp)(void*,void*)){
-		if(arv!=NULL){
-			if( comp(key,arv->info)==0){
-				printf("---%d---\n", *((int*)arv->info));
-				node *tmp=arv;
-				if(arv->right==NULL)arv=arv->left;
-				else if(arv->left==NULL)arv=arv->right;
-				else {	
-					node *prev;
-					tmp=arv->left;
-					prev=arv;
-					while(tmp->right!=NULL){
-						prev=tmp;
-						tmp=tmp->right;
-					}
-					arv->info=tmp->info;
-					if(prev==arv)prev->left=tmp->left;
-					else prev->right=tmp->left;
-					
+	if(arv!=NULL){
+		if( comp(key,arv->info)==0){
+			node *tmp=arv;
+			if(arv->right==NULL)arv=arv->left;
+			else if(arv->left==NULL)arv=arv->right;
+			else {	
+				node *prev;
+				tmp=arv->left;
+				prev=arv;
+				while(tmp->right!=NULL){
+					prev=tmp;
+					tmp=tmp->right;
 				}
-				free(tmp);
-			
-
-			}else if( comp(key,arv->info)==1)arv->right=remove_by_copy(arv->right,key,comp);
-			else arv->left=remove_by_copy(arv->left,key,comp);
-		}
-		return arv;
+				arv->info=tmp->info;
+				if(prev==arv)prev->left=tmp->left;
+				else prev->right=tmp->left;				
+			}
+			free(tmp);
+		}else if( comp(key,arv->info)==1)arv->right=remove_by_copy(arv->right,key,comp);
+		else arv->left=remove_by_copy(arv->left,key,comp);
+	}
+	return arv;
 }
 
 //retorna um nível de uma arvore a partir do valor do nível de sua raiz (generica para subarvores)
@@ -103,6 +100,13 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 	if(comp(arv->info,key)==0)return nivel;
 	else if(comp(arv->info,key)==1)nivel=MAX(nivel,get_nivel(arv->left,key,nivel+1,comp));
 	else nivel=MAX(nivel,get_nivel(arv->right,key,nivel+1,comp));
+}
+
+int get_altura(node *arv){
+	int altura=0;
+	if(arv->left!=NULL)altura=MAX(altura,get_altura(arv->left));
+	if(arv->right!=NULL)altura=MAX(altura,get_altura(arv->right));
+	return altura+1;
 }
 
 
