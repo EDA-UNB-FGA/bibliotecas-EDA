@@ -16,10 +16,14 @@ typedef struct Node node;
 node *novo(void*);
 node *generic_insert(node*, node*, int (*)(void*,void*));
 node *remove_by_merging(node*, void*, int (*)(void*,void*));
+node *remove_by_copy(node*, void*, int (*)(void*,void*));
 int get_nivel(node*,void*,int,int (*)(void*,void*));
 
 //funções interativas
 void busca_por_largura(node*,void (*)(void*),int (*)(void*,void*));
+
+
+
 //retorna um nó com a informação de data
 node *novo(void *data){
 	node *tmp = (node*)malloc(sizeof(node));
@@ -63,6 +67,37 @@ node * remove_by_merging(node *arv, void *key, int (*comp)(void*a, void*b)){
 	return cpy;
 }
 
+
+//remove um elemento da árvore por cópia
+node *remove_by_copy(node* arv, void *key, int (*comp)(void*,void*)){
+		if(arv!=NULL){
+			if( comp(key,arv->info)==0){
+				printf("---%d---\n", *((int*)arv->info));
+				node *tmp=arv;
+				if(arv->right==NULL)arv=arv->left;
+				else if(arv->left==NULL)arv=arv->right;
+				else {	
+					node *prev;
+					tmp=arv->left;
+					prev=arv;
+					while(tmp->right!=NULL){
+						prev=tmp;
+						tmp=tmp->right;
+					}
+					arv->info=tmp->info;
+					if(prev==arv)prev->left=tmp->left;
+					else prev->right=tmp->left;
+					
+				}
+				free(tmp);
+			
+
+			}else if( comp(key,arv->info)==1)arv->right=remove_by_copy(arv->right,key,comp);
+			else arv->left=remove_by_copy(arv->left,key,comp);
+		}
+		return arv;
+}
+
 //retorna um nível de uma arvore a partir do valor do nível de sua raiz (generica para subarvores)
 int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 	if(comp(arv->info,key)==0)return nivel;
@@ -70,15 +105,16 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 	else nivel=MAX(nivel,get_nivel(arv->right,key,nivel+1,comp));
 }
 
+
 //balanceamento de vetor ordenado (ainda não funcional)
-node* balance_vet(void* matriz[], int first, int last){
+node* balance_vet(void* matriz[], int first, int last, int (*comp)(void*,void*)){
 	node *cpy=NULL;
 	int mid=(first+last)/2;
-	printf("left %d right %d my mid %d\n",first, last,mid);
+	printf("Você é um BOSTA\n");
 	while(first<=last){
-		cpy=novo(matriz[mid]);
-		cpy->left=balance_vet(matriz,first,mid-1);
-		cpy->right=balance_vet(matriz,mid+1,last);
+		cpy=generic_insert(cpy,novo(matriz[mid]),comp);
+		cpy->left=balance_vet(matriz,first,mid-1,comp);
+		cpy->right=balance_vet(matriz,mid+1,last,comp);
 	}
 	return cpy;
 }
