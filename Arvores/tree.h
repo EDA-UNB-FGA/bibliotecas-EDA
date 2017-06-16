@@ -22,7 +22,8 @@ int get_altura(node*);
 
 //funções interativas
 void busca_por_largura(node*,void (*)(void*),int (*)(void*,void*));
-
+node* rightRotate(node*);
+node* leftRotate(node*);
 
 
 //retorna um nó com a informação de data
@@ -41,6 +42,27 @@ node *generic_insert(node *root, node* element, int (*comp)(void*,void*)){
 	else{
 		if(comp(root->info,element->info)==1)root->left=generic_insert(root->left,element,comp);
 		else root->right=generic_insert(root->right,element,comp);
+	}
+	return root;
+}
+
+//aproveitando a pilha de recursão
+node *avl_insert(node *root, node *element, int (*comp)(void*,void*)){
+	if(root==NULL)return element;
+	else{
+		if( comp(root->info,element->info)==1)root->left=avl_insert(root->left,element,comp);
+		else root->right=avl_insert(root->right,element,comp);
+		int v = get_altura(root->left) - get_altura(root->right);
+		if(v>1 && comp(element->info,root->left->info)==-1)return rightRotate(root);
+		if(v<-1 && comp(element->info,root->right->info)==1) return leftRotate(root);
+		if(v>1 && comp(element->info,root->left->info)==1){
+			root->left=leftRotate(root->left);
+			return rightRotate(root);
+		}
+		if(v<-1 && comp(element->info,root->right->info)==-1){
+			root->right=rightRotate(root->right);
+			return leftRotate(root);
+		}
 	}
 	return root;
 }
@@ -104,8 +126,10 @@ int get_nivel(node *arv, void *key, int nivel,int (*comp)(void*,void*)){
 
 int get_altura(node *arv){
 	int altura=0;
-	if(arv->left!=NULL)altura=MAX(altura,get_altura(arv->left));
-	if(arv->right!=NULL)altura=MAX(altura,get_altura(arv->right));
+	if(arv!=NULL){
+		if(arv->left!=NULL)altura=MAX(altura,get_altura(arv->left));
+		if(arv->right!=NULL)altura=MAX(altura,get_altura(arv->right));
+	}else return 0;
 	return altura+1;
 }
 
@@ -145,5 +169,22 @@ void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
 		p(fila[inicio++]->info);
 	}
 }
+
+node* rightRotate(node *y){
+	node *x=y->left;
+	node *t2=x->right;
+	x->right=y;
+	y->left=t2;
+	return x;
+}
+
+node* leftRotate(node *x){
+	node *y=x->right;
+	node *t2=y->left;
+	y->left=x;
+	x->right=t2;
+	return y;
+}
+
 
 #endif

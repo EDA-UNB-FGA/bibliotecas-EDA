@@ -21,20 +21,29 @@ void print(void *a){
 	printf("[%d]", *((int*)a));
 }
 
+node* insert(node *arv,int k,int (*comp)(void*,void*)){
+	return generic_insert(arv,novo(init(k)),comp);
+}
+
+//lista os pesos da árvore -- apenas pra teste--
+void listar(node *arv){
+	if(arv!=NULL){
+		if(arv->left!=NULL)listar(arv->left);
+		printf("[%d][%d]", get_altura(arv->right),get_altura(arv->left));
+		if(arv->right!=NULL)listar(arv->right);
+	}else printf("Arvore vazia\n");
+}
+
+
+
 int main(){
 
-	int vet[]={3,1,6,8,2,4};
+	int vet[]={3,1,6,8,2,4,12,18,11};
 	int i;
 	node *arv=NULL;
-
-	for(i=0; i<6; ++i){
-			arv=generic_insert(arv,novo(init(vet[i])),comparator);
-	}
-		printf("--------------\n");
-		list_in_ordem(arv,print);
-		printf("\n");
-		printf("Nível %d\n", get_nivel(arv,init(2),0,comparator));
-		busca_por_largura(arv,print,comparator);
-
+	for(i=0; i<9; ++i)
+			arv=avl_insert(arv,novo(init(vet[i])),comparator);
+	busca_por_largura(arv,print,comparator);
+	printf("\n");
  return 0;
 }
