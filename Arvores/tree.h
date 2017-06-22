@@ -52,6 +52,7 @@ node *avl_insert(node *root, node *element, int (*comp)(void*,void*)){
 	else{
 		if( comp(root->info,element->info)==1)root->left=avl_insert(root->left,element,comp);
 		else root->right=avl_insert(root->right,element,comp);
+		/*a diferença do código começa aqui */
 		int v = get_altura(root->left) - get_altura(root->right);
 		if(v>1 && comp(element->info,root->left->info)==-1)return rightRotate(root);
 		if(v<-1 && comp(element->info,root->right->info)==1) return leftRotate(root);
@@ -63,6 +64,7 @@ node *avl_insert(node *root, node *element, int (*comp)(void*,void*)){
 			root->right=rightRotate(root->right);
 			return leftRotate(root);
 		}
+		/*termina aqui a diferença*/
 	}
 	return root;
 }
@@ -169,21 +171,22 @@ void busca_por_largura(node *arv, void (*p)(void*), int (*comp)(void*,void*)){
 		p(fila[inicio++]->info);
 	}
 }
-
-node* rightRotate(node *y){
-	node *x=y->left;
-	node *t2=x->right;
-	x->right=y;
-	y->left=t2;
-	return x;
+//rotação direito
+node* rightRotate(node *A){					/*####A##### ####B#####*/
+	node *B=A->left;					/*###/#\#### ###/#\####*/
+	node *right_B=B->right;					/*##B###3### ##1###A###*/
+	B->right=A;						/*#/#\###### *####/#\##*/
+	A->left=right_B;					/*1###2##### ####2###3#*/
+	return B;
 }
 
-node* leftRotate(node *x){
-	node *y=x->right;
-	node *t2=y->left;
-	y->left=x;
-	x->right=t2;
-	return y;
+//rotação esquerda
+node* leftRotate(node *A){
+	node *B=A->right; 					/*##A#### ####B###*/
+	node *left_B=B->left;					/*#/#\### ###/#\##*/
+	A->right=left_B;					/*1###B## ##A###3#*/
+	B->left=A;						/*###/#\# #/#\####*/
+	return B;						/*##2###3 1###2###*/
 }
 
 
