@@ -43,5 +43,4 @@ ___
 
 Não é o exemplo mais emocionante que podemos dar, no entanto, creio que basta para demonstrar a importância de EDA's para os seus software. Tente imaginar em quantas empresas não conseguiriam entregar seus serviços caso não tivessem soluções como essas em seus repertórios. Agora tentem imaginar quantos problemas complexos você pode (e vai) resolver apenas com conceitos básico de Estrutura de Dados.
 
-*Esse exemplo também serv é para o estudo de uma área muito importante em EDA's e algoritmos, a análise da complexidade de algoritmos... não iremos abordar neste curso no entanto espero ter despertado o interesse para a importância de um algoritmo eficiente.*
 ___
