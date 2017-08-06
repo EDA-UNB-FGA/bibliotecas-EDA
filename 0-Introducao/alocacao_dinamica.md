@@ -60,7 +60,7 @@ int main(){
 ```
 #### calloc
 
-Praticamente faz a mesma coisa que a função **malloc** no entanto a função callor limpa o lixo da memória (seta os valores em 0) e depois retorna o ponteiro para aquela região.
+Praticamente faz a mesma coisa que a função **malloc** no entanto a função calloc limpa o lixo da memória (seta os valores em 0) e depois retorna o ponteiro para aquela região.
 
 **Assinatura:** void* calloc(size_t numero_membros, size_t tamanho_do_tipo;
 
@@ -87,7 +87,7 @@ int main(){
 ```
 #### realloc
 
-Como o próprio nome já entrega, **realloc** realoca a memória, essa função é muito usada quando precisamos aumentar o tamanho de um vetor por exemplo, é altamente recomendado que domine ela no estudo de vetor pois irá facilitar muito o seu trabalho.
+Como o próprio nome já entrega, **realloc** realoca a memória, essa função é muito usada quando precisamos aumentar o tamanho de um vetor por exemplo. É altamente recomendado que domine ela no estudo de vetor pois irá facilitar muito o seu trabalho.
 
 **Assinatura:** void *realloc(void *ponteiro_atual,size_t novo_tamanho);
 
@@ -127,5 +127,5 @@ free(vetor);
 __
 #### Apêndice
 
-  * **Operador sizeof() : ** O operador sizeof é usado para mostrar quantos *bytes* determinado tipo ou estrutura ocupa.
+  * **Operador sizeof() :** O operador sizeof é usado para mostrar quantos *bytes* determinado tipo ou estrutura ocupa.
 ___

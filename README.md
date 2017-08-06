@@ -6,6 +6,7 @@ Material de apoio para disciplinas de Estrutura de Dados.
 
 ## Table of Contents
   * [Introdução](0-Introducao/README.md)
+    * [Alocação Dinâmica de Memória](0-Introducao/alocacao_dinamica.md)
   * [Listas](1-Listas)
     * [Simples](1-Listas/lista_simples/README.md)
     * [Circulares](mycustomerro.md)
