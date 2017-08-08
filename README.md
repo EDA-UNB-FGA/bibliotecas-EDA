@@ -1,6 +1,6 @@
-# Teste de bibliotecas EDAs em linguagem C
+# Biblioteca de EDAs em linguagem C
 
-Biblioteca de estruturas de dados em C/C++
+Biblioteca de estruturas de dados em C.</br>
 Material de apoio para disciplinas de Estrutura de Dados.
 
 

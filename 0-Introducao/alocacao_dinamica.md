@@ -2,7 +2,7 @@
 
 
 ___
-**Observação: ** Esse conteúdo apenas vai explicar como fazer alocação dinâmica em C, procure as referências para aprender a parte mais "teórica" do conteúdo.
+**Observação:** Esse conteúdo apenas vai explicar como fazer alocação dinâmica em C, procure as referências para aprender a parte mais "teórica" do conteúdo.
 ___
 
 ### Biblioteca Padrão
@@ -124,7 +124,7 @@ free(vetor);
 
 
 
-__
+___
 #### Apêndice
 
   * **Operador sizeof() :** O operador sizeof é usado para mostrar quantos *bytes* determinado tipo ou estrutura ocupa.
