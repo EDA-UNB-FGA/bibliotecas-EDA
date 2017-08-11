@@ -35,4 +35,4 @@ Vamos criar um arquivo de teste em C para treinar melhor:
 
 Aqui tenho o meu terminal aberto
 
-![Terminal](terminal.png = 1024x768)
+![Terminal](terminal.png | width=1000)
