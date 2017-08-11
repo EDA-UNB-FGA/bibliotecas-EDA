@@ -35,4 +35,12 @@ Vamos criar um arquivo de teste em C para treinar melhor:
 
 Aqui tenho o meu terminal aberto
 
-![Terminal](terminal.png | width=1000)
+<img src ="terminal.png" width=400 >
+
+Vamos criar um arquivo '.c' chamado teste:
+
+<img src = "teste2.png" width=400>
+
+Após isso o terminal abre uma instância no VIM do arquivo teste.c
+
+<img src="teste3.png" width=400>
