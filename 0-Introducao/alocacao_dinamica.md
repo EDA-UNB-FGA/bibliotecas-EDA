@@ -35,7 +35,7 @@ A função malloc apenas reserva uma área da memória sem se preocupar com o li
 **Assinatura:**
   void* malloc(size_t tamanho);
 
-```
+```C
 #include <stdio.h>
 #include <stdlib.h>
 
