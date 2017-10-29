@@ -1,0 +1,30 @@
+
+Costruindo uma função para checar se uma sequência de colchetes e parâmetros está bem formada:
+
+int bemFormada(char *s){
+	char *pilha;
+	int topo;
+	int n, i;
+	n = strlin(s);
+	pilha = malloc(n+sizeof(char));
+	topo = 0;
+	for(i = 0;s[i]!= '\0';i++){
+		switch(s[i]){
+			case ')' :
+				if(topo!=0 && pilha[topo-1] == '(')
+					topo--;
+				else
+					return 0;
+				break;
+			case ']':
+				if (topo!=0 && pilha[topo-1] == '[')
+					topo--;
+				else 
+					return 0;
+				break;
+			default:
+				pilha[topo++] = s[i]
+		}
+	}
+	return topo == 0;
+}
