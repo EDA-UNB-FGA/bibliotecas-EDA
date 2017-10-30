@@ -5,8 +5,8 @@ int bemFormada(char *s){
 	char *pilha;
 	int topo;
 	int n, i;
-	n = strlin(s);
-	pilha = malloc(n+sizeof(char));
+	n = strlen(s);
+	pilha = malloc(n*sizeof(char));
 	topo = 0;
 	for(i = 0;s[i]!= '\0';i++){
 		switch(s[i]){
